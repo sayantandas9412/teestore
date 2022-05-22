@@ -10,8 +10,11 @@ interface CheckBoxContainerProps {
       selectedColours: string[];
     }>
   >;
-  disabled: boolean;
-  setDisableButton: Dispatch<SetStateAction<boolean>>;
+  disabled?: boolean;
+  setDisableButton?: Dispatch<SetStateAction<boolean>>;
+  selectedColours: string[];
+  data: any;
+  setState: any;
 }
 
 const CheckBoxColourContainer: FC<CheckBoxContainerProps> = ({
@@ -20,25 +23,26 @@ const CheckBoxColourContainer: FC<CheckBoxContainerProps> = ({
   setSelectedColours,
   disabled,
   setDisableButton,
+  selectedColours,
+  data,
+  setState,
 }) => {
   return (
     <>
       <Heading size="sm" my="1rem" fontFamily="primary.heading">
         {heading}
       </Heading>
-      {uniqueColouredItems.map(
-        (item: string, index: number) =>
-          setSelectedColours &&
-          setDisableButton && (
-            <ChakraColourCheckbox
-              item={item}
-              key={index}
-              setSelectedColours={setSelectedColours}
-              disabled={disabled ?? false}
-              setDisableButton={setDisableButton}
-            />
-          )
-      )}
+      {uniqueColouredItems.map((item: string, index: number) => (
+        <ChakraColourCheckbox
+          item={item}
+          key={index}
+          setSelectedColours={setSelectedColours}
+          disabled={disabled ?? false}
+          selectedColours={selectedColours}
+          data={data}
+          setState={setState}
+        />
+      ))}
     </>
   );
 };

@@ -10,7 +10,10 @@ interface ChakraColourCheckbox {
     }>
   >;
   disabled?: boolean;
-  setDisableButton: Dispatch<SetStateAction<boolean>>;
+  setDisableButton?: Dispatch<SetStateAction<boolean>>;
+  selectedColours: string[];
+  data: any;
+  setState: any;
 }
 
 const ChakraColourCheckbox: FC<ChakraColourCheckbox> = ({
@@ -18,7 +21,9 @@ const ChakraColourCheckbox: FC<ChakraColourCheckbox> = ({
   item,
   setSelectedColours,
   disabled,
-  setDisableButton,
+  selectedColours,
+  data,
+  setState,
 }) => {
   const handleCheckboxChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -28,7 +33,6 @@ const ChakraColourCheckbox: FC<ChakraColourCheckbox> = ({
     }
   ) => {
     if (e.target.checked === true) {
-      setDisableButton(false);
       setSelectedColours((prevState) => {
         prevState.selectedColours?.push(e.target.value);
 
@@ -36,31 +40,45 @@ const ChakraColourCheckbox: FC<ChakraColourCheckbox> = ({
           selectedColours: [...new Set(prevState.selectedColours)],
         };
       });
+      const filteredColorData = data.filter((child: { color: string }) => {
+        return selectedColours?.includes(child.color) ?? [];
+      });
+      setState(filteredColorData);
     }
+
     if (e.target.checked === false) {
       setSelectedColours((prevState) => {
         var index = prevState.selectedColours?.indexOf(e.target.value) ?? -1;
 
-        let modifiedArr: string[] = [...prevState.selectedColours];
+        let modifiedArr: string[] = prevState.selectedColours;
         if (index) {
           modifiedArr.splice(index, 1);
           return { selectedColours: modifiedArr };
         }
-        modifiedArr.splice(0);
+        modifiedArr.splice(0, 1);
         if (modifiedArr.length === 0) {
-          setDisableButton(false);
           return { selectedColours: [] };
         }
+
         return { selectedColours: modifiedArr };
       });
+
+      const formattedArr = data.filter((child: { color: string }) =>
+        selectedColours.includes(child.color)
+      );
+      setState(formattedArr);
+      if (selectedColours.length === 0) {
+        setSelectedColours({ selectedColours: [] });
+        setState(data);
+      }
     }
+    console.log(selectedColours);
   };
 
   return (
     <Checkbox
       size="md"
       colorScheme="green"
-      key={key}
       value={item}
       isDisabled={disabled}
       my="0.25rem"

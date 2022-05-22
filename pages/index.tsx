@@ -260,7 +260,7 @@ const Home: FC<ProductPageProps> = ({ data }) => {
         top="10.7rem"
         shadow="md"
       >
-        <Flex>
+        {/* <Flex>
           <Button
             variant="secondary"
             value="apply"
@@ -285,15 +285,16 @@ const Home: FC<ProductPageProps> = ({ data }) => {
           >
             Reset
           </Button>
-        </Flex>
+        </Flex> */}
         <CheckBoxColourContainer
           heading="Colour"
           uniqueColouredItems={uniqueColouredItems}
-          disabled={disabled}
+          selectedColours={selectedColoursData.selectedColours}
           setSelectedColours={setSelectedColours}
-          setDisableButton={setDisableButton}
+          data={data}
+          setState={setState}
         />
-        <CheckBoxGenderContainer
+        {/* <CheckBoxGenderContainer
           heading="Gender"
           uniqueGenderItems={uniqueGenderItems}
           setSelectedGender={setSelectedGender}
@@ -310,7 +311,7 @@ const Home: FC<ProductPageProps> = ({ data }) => {
           uniqueTypeItems={uniqueTypeItems}
           setSelectedType={setSelectedType}
           setDisableButton={setDisableButton}
-        />
+        /> */}
       </Flex>
     </HStack>
   );
