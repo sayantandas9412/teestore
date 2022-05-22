@@ -14,11 +14,10 @@ import {
 import Image from "next/image";
 import { ChangeEvent, FC, FormEvent, MouseEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import ChakraCheckbox from "../components/ChakraCheckbox";
 import CheckBoxColourContainer from "../components/CheckBoxColourContainer";
-import CheckBoxContainer from "../components/CheckBoxColourContainer";
 import CheckBoxGenderContainer from "../components/CheckBoxGenderContainer";
 import CheckBoxPriceContainer from "../components/CheckBoxPriceContainer";
+import CheckBoxTypeContainer from "../components/CheckBoxTypeContainer";
 
 interface ProductPageProps {
   data: Data[];
@@ -41,9 +40,11 @@ const Home: FC<ProductPageProps> = ({ data }) => {
   const totalColouredItems = data.map((item) => item.color);
   const totalGenderItems = data.map((item) => item.gender);
   const totalPriceItems = data.map((item) => item.price);
+  const totalTypeItems = data.map((item) => item.type);
   const uniqueColouredItems = [...new Set(totalColouredItems)];
   const uniqueGenderItems = [...new Set(totalGenderItems)];
   const uniquePriceItems = [...new Set(totalPriceItems)];
+  const uniqueTypeItems = [...new Set(totalTypeItems)];
   const [disabled, setDisabled] = useState(false);
   const [disableButton, setDisableButton] = useState(true);
   const [checked, setChecked] = useState(false);
@@ -56,6 +57,10 @@ const Home: FC<ProductPageProps> = ({ data }) => {
   const [selectedPriceData, setSelectedPrice] = useState<any>({
     selectedPrice: [],
   });
+  const [selectedTypeData, setSelectedType] = useState<any>({
+    selectedType: [],
+  });
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const filteredData = data.filter(
       (child) =>
@@ -83,25 +88,60 @@ const Home: FC<ProductPageProps> = ({ data }) => {
         selectedPriceData.selectedPrice?.includes(String(child.price)) ?? []
       );
     });
-    if (filteredColorData.length && filteredGenderData.length) {
-      const resultantArray = filteredGenderData.filter((x) =>
-        filteredColorData.includes(x)
-      );
-      setState(resultantArray);
-      return;
-    }
 
-    if (filteredColorData.length) {
+    const filteredTypeData = data.filter((child) => {
+      return selectedTypeData.selectedType?.includes(child.type) ?? [];
+    });
+
+    const intersection = (arr1: string | any[], arr2: string | any[]) => {
+      const res = [];
+      for (let i = 0; i < arr1.length; i++) {
+        if (!arr2.includes(arr1[i])) {
+          continue;
+        }
+        res.push(arr1[i]);
+      }
+      return res;
+    };
+
+    const intersectMany = (...arrs: Data[][]) => {
+      let res = arrs[0].slice();
+      for (let i = 1; i < arrs.length; i++) {
+        res = intersection(res, arrs[i]);
+      }
+      return res;
+    };
+
+    if (
+      filteredColorData.length &&
+      filteredGenderData.length &&
+      filteredPriceData.length &&
+      filteredTypeData.length
+    ) {
+      setState(
+        intersectMany(
+          filteredColorData,
+          filteredGenderData,
+          filteredPriceData,
+          filteredTypeData
+        )
+      );
+      return;
+    } else if (filteredColorData.length && filteredGenderData.length) {
       setState(filteredColorData);
       return;
-    }
-    if (filteredGenderData.length) {
+    } else if (filteredColorData.length) {
+      setState(filteredColorData);
+      return;
+    } else if (filteredGenderData.length) {
       setState(filteredGenderData);
       return;
-    }
-
-    if (filteredPriceData.length) {
+    } else if (filteredPriceData.length) {
       setState(filteredPriceData);
+      return;
+    } else if (filteredTypeData.length) {
+      console.log("this is called");
+      setState(filteredTypeData);
       return;
     }
 
@@ -123,6 +163,9 @@ const Home: FC<ProductPageProps> = ({ data }) => {
     });
     setSelectedPrice({
       selectedPrice: selectedPriceData.selectedPrice,
+    });
+    setSelectedType({
+      selectedType: selectedTypeData.selectedType,
     });
     setState(data);
   };
@@ -260,6 +303,12 @@ const Home: FC<ProductPageProps> = ({ data }) => {
           heading="Price"
           uniquePriceItems={uniquePriceItems}
           setSelectedPrice={setSelectedPrice}
+          setDisableButton={setDisableButton}
+        />
+        <CheckBoxTypeContainer
+          heading="Type"
+          uniqueTypeItems={uniqueTypeItems}
+          setSelectedType={setSelectedType}
           setDisableButton={setDisableButton}
         />
       </Flex>
