@@ -14,6 +14,9 @@ interface ChakraColourCheckbox {
   selectedColours: string[];
   data: any;
   setState: any;
+  state: any;
+  memory: any;
+  setMemory: any;
 }
 
 const ChakraColourCheckbox: FC<ChakraColourCheckbox> = ({
@@ -24,6 +27,9 @@ const ChakraColourCheckbox: FC<ChakraColourCheckbox> = ({
   selectedColours,
   data,
   setState,
+  state,
+  memory,
+  setMemory,
 }) => {
   const handleCheckboxChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -44,6 +50,7 @@ const ChakraColourCheckbox: FC<ChakraColourCheckbox> = ({
         return selectedColours?.includes(child.color) ?? [];
       });
       setState(filteredColorData);
+      setMemory([...filteredColorData]);
     }
 
     if (e.target.checked === false) {
@@ -67,12 +74,12 @@ const ChakraColourCheckbox: FC<ChakraColourCheckbox> = ({
         selectedColours.includes(child.color)
       );
       setState(formattedArr);
+      setMemory([...formattedArr]);
       if (selectedColours.length === 0) {
         setSelectedColours({ selectedColours: [] });
         setState(data);
       }
     }
-    console.log(selectedColours);
   };
 
   return (

@@ -10,14 +10,24 @@ interface CheckBoxGenderProps {
       selectedGender: string[];
     }>
   >;
-  setDisableButton: any;
+  selectedGender: any;
+  setState: any;
+  data: any;
+  state: any;
+  selectedColour: any;
+  handleCheckBoxClick: any;
 }
 
 const CheckBoxGenderContainer: FC<CheckBoxGenderProps> = ({
   heading,
   uniqueGenderItems,
   setSelectedGender,
-  setDisableButton,
+  selectedGender,
+  data,
+  setState,
+  state,
+  selectedColour,
+  handleCheckBoxClick,
 }) => {
   return (
     <>
@@ -29,7 +39,12 @@ const CheckBoxGenderContainer: FC<CheckBoxGenderProps> = ({
           item={item}
           key={index}
           setSelectedGender={setSelectedGender}
-          setDisableButton={setDisableButton}
+          selectedGender={selectedGender}
+          data={data}
+          setState={setState}
+          state={state}
+          selectedColour={selectedColour}
+          handleCheckBoxClick={handleCheckBoxClick}
         />
       ))}
     </>

@@ -15,6 +15,9 @@ interface CheckBoxContainerProps {
   selectedColours: string[];
   data: any;
   setState: any;
+  state: any;
+  memory: any;
+  setMemory: any;
 }
 
 const CheckBoxColourContainer: FC<CheckBoxContainerProps> = ({
@@ -26,6 +29,9 @@ const CheckBoxColourContainer: FC<CheckBoxContainerProps> = ({
   selectedColours,
   data,
   setState,
+  state,
+  memory,
+  setMemory,
 }) => {
   return (
     <>
@@ -41,6 +47,9 @@ const CheckBoxColourContainer: FC<CheckBoxContainerProps> = ({
           selectedColours={selectedColours}
           data={data}
           setState={setState}
+          state={state}
+          memory={memory}
+          setMemory={setMemory}
         />
       ))}
     </>

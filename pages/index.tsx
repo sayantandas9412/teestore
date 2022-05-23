@@ -45,6 +45,12 @@ const Home: FC<ProductPageProps> = ({ data }) => {
   const uniqueGenderItems = [...new Set(totalGenderItems)];
   const uniquePriceItems = [...new Set(totalPriceItems)];
   const uniqueTypeItems = [...new Set(totalTypeItems)];
+  const [memory, setMemory] = useState({
+    selectedColours: [],
+    selectedGender: [],
+    selectedPrice: [],
+    selectedType: [],
+  });
   const [disabled, setDisabled] = useState(false);
   const [disableButton, setDisableButton] = useState(true);
   const [checked, setChecked] = useState(false);
@@ -60,6 +66,15 @@ const Home: FC<ProductPageProps> = ({ data }) => {
   const [selectedTypeData, setSelectedType] = useState<any>({
     selectedType: [],
   });
+
+  const handleCheckBoxClick = (e: any) => {
+    setMemory({
+      selectedColours: selectedColoursData.selectedColours,
+      selectedGender: selectedGenderData.selectedGender,
+      selectedPrice: selectedPriceData.selectedPrice,
+      selectedType: selectedTypeData.selectedType,
+    });
+  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const filteredData = data.filter(
@@ -293,14 +308,22 @@ const Home: FC<ProductPageProps> = ({ data }) => {
           setSelectedColours={setSelectedColours}
           data={data}
           setState={setState}
+          state={state}
+          memory={memory}
+          setMemory={setMemory}
         />
-        {/* <CheckBoxGenderContainer
+        <CheckBoxGenderContainer
           heading="Gender"
           uniqueGenderItems={uniqueGenderItems}
           setSelectedGender={setSelectedGender}
-          setDisableButton={setDisableButton}
+          selectedGender={selectedGenderData.selectedGender}
+          selectedColour={selectedColoursData.selectedColour}
+          data={data}
+          setState={setState}
+          state={state}
+          handleCheckBoxClick={handleCheckBoxClick}
         />
-        <CheckBoxPriceContainer
+        {/* <CheckBoxPriceContainer
           heading="Price"
           uniquePriceItems={uniquePriceItems}
           setSelectedPrice={setSelectedPrice}
