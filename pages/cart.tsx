@@ -40,6 +40,7 @@ const cart: FC<CartPageProps> = ({ cartItems }) => {
           cartItemPrice - (selectedQuantity - Number(e.target.value)) * price;
         itemPrice = itemPrice - cartItemPrice + price;
         setTotalCartValue(itemPrice);
+        console.log(cartItemPrice);
       } else {
         cartItemPrice = Number(e.target.value) * price;
         // itemPrice = totalCartValue + cartItemPrice - price;
