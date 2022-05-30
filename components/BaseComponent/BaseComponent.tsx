@@ -1,13 +1,38 @@
 import { Box } from "@chakra-ui/react";
+import { FC, useState } from "react";
 import Footer from "../Footer/Footer";
-import Header from "../Header/Header";
+import Header, { HeaderData } from "../Header/Header";
 import Layout from "../Layout/Layout";
 
-const BaseComponent = (props: { children: any }) => {
+interface BaseComponentProps {
+  children?: any;
+  quantity?: number;
+  showQuantity?: boolean;
+}
+
+const BaseComponent: FC<BaseComponentProps> = ({
+  children,
+  quantity,
+  showQuantity,
+}) => {
+  const headerData: HeaderData = {
+    logo: {
+      title: "ShansTees",
+      href: "/",
+    },
+    navItems: [
+      {
+        title: "Products",
+        href: "/",
+        showIcon: false,
+        active: true,
+      },
+    ],
+  };
   return (
     <Layout>
-      <Header />
-      <Box h="100%">{props.children}</Box>
+      <Header {...headerData} quantity={quantity} showQuantity={showQuantity} />
+      <Box minH="110vh">{children}</Box>
       <Footer />
     </Layout>
   );

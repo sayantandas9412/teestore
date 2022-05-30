@@ -10,6 +10,8 @@ const Footer = () => {
       alignItems="center"
       justifyContent="center"
       fontFamily="primary.heading"
+      width="100%"
+      height="60px"
     >
       <Box pr="0.5rem">Made with </Box>
       <Icon as={AiFillHeart} color="orangered" />

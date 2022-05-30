@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Flex,
   FormControl,
   FormLabel,
@@ -12,18 +11,27 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import { ChangeEvent, FC, FormEvent, MouseEvent, useState } from "react";
+import Router from "next/router";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import CheckBoxColourContainer from "../components/CheckBoxColourContainer";
-import CheckBoxGenderContainer from "../components/CheckBoxGenderContainer";
-import CheckBoxPriceContainer from "../components/CheckBoxPriceContainer";
-import CheckBoxTypeContainer from "../components/CheckBoxTypeContainer";
+import AddToCartButton from "../components/AddToCartButton";
+import CheckBoxColourContainer from "../components/ColourCheckBox/CheckBoxColourContainer";
+import CheckBoxGenderContainer from "../components/GenderCheckBox/CheckBoxGenderContainer";
+import ChakraModal from "../components/Modal";
+import CheckBoxPriceContainer from "../components/PriceCheckBox/CheckBoxPriceContainer";
+import CheckBoxTypeContainer from "../components/TypeCheckBox/CheckBoxTypeContainer";
 
 interface ProductPageProps {
   data: Data[];
+  quantity?: number;
+  handleAddCartClick?: any;
+  disableAddCartButton: boolean;
+  showModal: boolean;
+  modalIsOpen: any;
+  modalOnClose: any;
 }
 
-interface Data {
+export interface Data {
   id: number;
   imageURL: string;
   name: string;
@@ -33,9 +41,25 @@ interface Data {
   color: string;
   gender: string;
   quantity: number;
+  disabled: boolean;
 }
 
-const Home: FC<ProductPageProps> = ({ data }) => {
+interface Filters {
+  color: string[];
+  price: string[];
+  type: string[];
+  gender: string[];
+}
+
+const Home: FC<ProductPageProps> = ({
+  data,
+  quantity,
+  handleAddCartClick,
+  disableAddCartButton,
+  showModal,
+  modalIsOpen,
+  modalOnClose,
+}) => {
   const [state, setState] = useState(data);
   const totalColouredItems = data.map((item) => item.color);
   const totalGenderItems = data.map((item) => item.gender);
@@ -45,15 +69,12 @@ const Home: FC<ProductPageProps> = ({ data }) => {
   const uniqueGenderItems = [...new Set(totalGenderItems)];
   const uniquePriceItems = [...new Set(totalPriceItems)];
   const uniqueTypeItems = [...new Set(totalTypeItems)];
-  const [memory, setMemory] = useState({
-    selectedColours: [],
-    selectedGender: [],
-    selectedPrice: [],
-    selectedType: [],
-  });
-  const [disabled, setDisabled] = useState(false);
-  const [disableButton, setDisableButton] = useState(true);
-  const [checked, setChecked] = useState(false);
+  const [colourData, setColour] = useState({ color: [] });
+  const [genderData, setGender] = useState({ gender: [] });
+  const [priceData, setPrice] = useState({ price: [] });
+  const [typeData, setType] = useState({ type: [] });
+  const [isSearched, setIsSearched] = useState(false);
+  const [searchedItems, setSearchedItems] = useState(data);
   const [selectedColoursData, setSelectedColours] = useState<any>({
     selectedColours: [],
   });
@@ -67,124 +88,244 @@ const Home: FC<ProductPageProps> = ({ data }) => {
     selectedType: [],
   });
 
+  // useEffect(() => {
+  //   const localStorageData = JSON.parse(window.localStorage.getItem("data"));
+  //   setState(localStorageData);
+  // }, []);
+
+  // useEffect(() => {
+  //   window.localStorage.setItem("data", JSON.stringify(state));
+  // }, [state]);
+
+  useEffect(() => {
+    const filters: Filters = {
+      ...colourData,
+      ...genderData,
+      ...priceData,
+      ...typeData,
+    };
+
+    let resultantArr = isSearched ? searchedItems : data;
+    let categories = [];
+    const findState = (filters: Filters) => {
+      resultantArr.forEach((value) => {
+        const keys = Object.keys(value);
+
+        categories = keys.filter((item) => {
+          return item in filters;
+        });
+        categories.forEach((category) => {
+          if (category === "gender" && filters[category].length) {
+            resultantArr = resultantArr.filter((item) =>
+              filters[category].includes(item.gender)
+            );
+          }
+          if (category === "type" && filters[category].length) {
+            resultantArr = resultantArr.filter((item) =>
+              filters[category].includes(item.type)
+            );
+          }
+          if (category === "price" && filters[category].length) {
+            resultantArr = resultantArr.filter((item) =>
+              filters[category].includes(String(item.price))
+            );
+          }
+          if (category === "color" && filters[category].length) {
+            resultantArr = resultantArr.filter((item) =>
+              filters[category].includes(item.color)
+            );
+          }
+        });
+        return resultantArr;
+      });
+      return resultantArr;
+    };
+
+    const finalState = findState(filters);
+    setState(finalState);
+  }, [
+    selectedColoursData.selectedColours,
+    colourData.color,
+    selectedGenderData.selectedGender,
+    genderData.gender,
+    selectedPriceData.selectedPrice,
+    priceData.price,
+    selectedTypeData.selectedType,
+    typeData.type,
+  ]);
+
   const handleCheckBoxClick = (e: any) => {
-    setMemory({
-      selectedColours: selectedColoursData.selectedColours,
-      selectedGender: selectedGenderData.selectedGender,
-      selectedPrice: selectedPriceData.selectedPrice,
-      selectedType: selectedTypeData.selectedType,
-    });
+    // Colour changes -
+
+    if (uniqueColouredItems.includes(e.target.value)) {
+      if (e.target.checked === true) {
+        setSelectedColours((prevState: any) => {
+          prevState.selectedColours?.push(e.target.value);
+
+          return {
+            selectedColours: [...new Set(prevState.selectedColours)],
+          };
+        });
+
+        setColour({ color: selectedColoursData.selectedColours });
+      }
+
+      if (e.target.checked === false) {
+        setSelectedColours((prevState: any) => {
+          var index = prevState.selectedColours?.indexOf(e.target.value) ?? -1;
+
+          const modifiedArr: string[] = prevState.selectedColours;
+          if (index) {
+            modifiedArr.splice(index, 1);
+            const transformedArr = [...modifiedArr];
+            return { selectedColours: transformedArr };
+          }
+          modifiedArr.splice(0, 1);
+          if (modifiedArr.length === 0) {
+            return { selectedColours: [] };
+          }
+
+          return { selectedColours: modifiedArr };
+        });
+
+        if (selectedColoursData.selectedColours.length === 0) {
+          setSelectedColours({ selectedColours: [] });
+          // setState(data);
+        }
+        setColour({ color: selectedColoursData.selectedColours });
+      }
+    }
+
+    // gender Changes --
+
+    if (uniqueGenderItems.includes(e.target.value)) {
+      if (e.target.checked === true) {
+        setSelectedGender((prevState: any) => {
+          prevState.selectedGender?.push(e.target.value);
+
+          return {
+            selectedGender: [...new Set(prevState.selectedGender)],
+          };
+        });
+        setGender({ gender: selectedGenderData.selectedGender });
+      }
+      if (e.target.checked === false) {
+        setSelectedGender((prevState: any) => {
+          var index = prevState.selectedGender?.indexOf(e.target.value) ?? -1;
+
+          let modifiedArr: string[] = prevState.selectedGender;
+          if (index) {
+            modifiedArr.splice(index, 1);
+            return { selectedGender: modifiedArr };
+          }
+          modifiedArr.splice(0, 1);
+          if (modifiedArr.length === 0) {
+            return { selectedGender: [] };
+          }
+
+          return { selectedGender: modifiedArr };
+        });
+        setGender({ gender: selectedGenderData.selectedGender });
+      }
+    }
+
+    // PRICE CHANGES  -
+
+    if (uniquePriceItems.includes(Number(e.target.value))) {
+      if (e.target.checked === true) {
+        setSelectedPrice((prevState: any) => {
+          prevState.selectedPrice?.push(e.target.value);
+
+          return {
+            selectedPrice: [...new Set(prevState.selectedPrice)],
+          };
+        });
+        setPrice({ price: selectedPriceData.selectedPrice });
+      }
+
+      if (e.target.checked === false) {
+        setSelectedPrice((prevState: any) => {
+          var index = prevState.selectedPrice?.indexOf(e.target.value) ?? -1;
+
+          const modifiedArr: string[] = prevState.selectedPrice;
+          if (index) {
+            modifiedArr.splice(index, 1);
+            const transformedArr = [...modifiedArr];
+            return { selectedPrice: transformedArr };
+          }
+          modifiedArr.splice(0, 1);
+          if (modifiedArr.length === 0) {
+            return { selectedPrice: [] };
+          }
+
+          return { selectedPrice: modifiedArr };
+        });
+
+        if (selectedPriceData.selectedPrice.length === 0) {
+          setSelectedPrice({ selectedPrice: [] });
+        }
+        setPrice({ price: selectedPriceData.selectedPrice });
+      }
+    }
+
+    // TYPE CHANGES -
+
+    if (uniqueTypeItems.includes(e.target.value)) {
+      if (e.target.checked === true) {
+        setSelectedType((prevState: any) => {
+          prevState.selectedType?.push(e.target.value);
+
+          return {
+            selectedType: [...new Set(prevState.selectedType)],
+          };
+        });
+        setType({ type: selectedTypeData.selectedType });
+      }
+
+      if (e.target.checked === false) {
+        setSelectedType((prevState: any) => {
+          var index = prevState.selectedType?.indexOf(e.target.value) ?? -1;
+
+          const modifiedArr: string[] = prevState.selectedType;
+          if (index) {
+            modifiedArr.splice(index, 1);
+            const transformedArr = [...modifiedArr];
+            return { selectedType: transformedArr };
+          }
+          modifiedArr.splice(0, 1);
+          if (modifiedArr.length === 0) {
+            return { selectedType: [] };
+          }
+
+          return { selectedType: modifiedArr };
+        });
+
+        if (selectedTypeData.selectedType.length === 0) {
+          setSelectedType({ selectedType: [] });
+        }
+        setType({ type: selectedTypeData.selectedType });
+      }
+    }
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const filteredData = data.filter(
+    setIsSearched(true);
+    const filteredData = state.filter(
       (child) =>
         child.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
         child.type.toLowerCase().includes(e.target.value.toLowerCase())
     );
     setState(filteredData);
-  };
-
-  const handleCheckboxSubmit = (e: FormEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setChecked(false);
-    setDisableButton(true);
-    setDisabled(true);
-    const filteredColorData = data.filter((child) => {
-      return selectedColoursData.selectedColours?.includes(child.color) ?? [];
-    });
-
-    const filteredGenderData = data.filter((child) => {
-      return selectedGenderData.selectedGender?.includes(child.gender) ?? [];
-    });
-
-    const filteredPriceData = data.filter((child) => {
-      return (
-        selectedPriceData.selectedPrice?.includes(String(child.price)) ?? []
-      );
-    });
-
-    const filteredTypeData = data.filter((child) => {
-      return selectedTypeData.selectedType?.includes(child.type) ?? [];
-    });
-
-    const intersection = (arr1: string | any[], arr2: string | any[]) => {
-      const res = [];
-      for (let i = 0; i < arr1.length; i++) {
-        if (!arr2.includes(arr1[i])) {
-          continue;
-        }
-        res.push(arr1[i]);
-      }
-      return res;
-    };
-
-    const intersectMany = (...arrs: Data[][]) => {
-      let res = arrs[0].slice();
-      for (let i = 1; i < arrs.length; i++) {
-        res = intersection(res, arrs[i]);
-      }
-      return res;
-    };
-
-    if (
-      filteredColorData.length &&
-      filteredGenderData.length &&
-      filteredPriceData.length &&
-      filteredTypeData.length
-    ) {
-      setState(
-        intersectMany(
-          filteredColorData,
-          filteredGenderData,
-          filteredPriceData,
-          filteredTypeData
-        )
-      );
-      return;
-    } else if (filteredColorData.length && filteredGenderData.length) {
-      setState(filteredColorData);
-      return;
-    } else if (filteredColorData.length) {
-      setState(filteredColorData);
-      return;
-    } else if (filteredGenderData.length) {
-      setState(filteredGenderData);
-      return;
-    } else if (filteredPriceData.length) {
-      setState(filteredPriceData);
-      return;
-    } else if (filteredTypeData.length) {
-      console.log("this is called");
-      setState(filteredTypeData);
-      return;
+    if (e.target.value === "") {
+      setIsSearched(false);
+      setState(data);
     }
-
-    // if (selectedColoursData.selectedColours.length === 0) {
-    //   setState(data);
-    //   // setDisableButton(true);
-    // }
-  };
-  const handleFormClear = (
-    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
-  ) => {
-    setChecked(false);
-    setDisabled(false);
-    setSelectedColours({
-      selectedColours: selectedColoursData.selectedColours,
-    });
-    setSelectedGender({
-      selectedGender: selectedGenderData.selectedGender,
-    });
-    setSelectedPrice({
-      selectedPrice: selectedPriceData.selectedPrice,
-    });
-    setSelectedType({
-      selectedType: selectedTypeData.selectedType,
-    });
-    setState(data);
+    setSearchedItems(filteredData);
   };
 
+  const handleAddCartButtonClick = (id: number) => {
+    handleAddCartClick(id, state, setState);
+  };
   const mapCards = state.map((item, index) => {
     return (
       <Box key={index}>
@@ -209,11 +350,14 @@ const Home: FC<ProductPageProps> = ({ data }) => {
             left="1rem"
           >
             {item.name}
+            {item.quantity === 0 ? (
+              <Box color="background.300">Sold Out !</Box>
+            ) : null}
           </Heading>
           <Box>
             <Image
               alt="item-image"
-              src={item.imageURL}
+              src={item.imageURL ?? "/error.jpeg"}
               width={100}
               height={100}
             />
@@ -221,23 +365,19 @@ const Home: FC<ProductPageProps> = ({ data }) => {
           <Box position="absolute" bottom="1rem" left="1rem" fontWeight="bold">
             {`Rs ${item.price}`}
           </Box>
-          <Button
-            outline={"2px solid"}
-            outlineColor="background.200"
-            variant="secondary"
-            position="absolute"
-            bottom="0.5rem"
-            right="0.5rem"
-            _hover={{ background: "#1515c5a8", color: "white" }}
-          >
-            Add to cart
-          </Button>
+          <AddToCartButton
+            title="Add to cart"
+            maxQuantity={item.quantity}
+            handleAddCartButtonClick={handleAddCartButtonClick}
+            disableAddCartButton={item.disabled}
+            id={item.id}
+          />
         </Box>
       </Box>
     );
   });
   return (
-    <HStack alignItems="start" pos="relative">
+    <HStack alignItems="center" justifyContent="center" pos="relative">
       <VStack>
         <FormControl w="60%" mt="2rem" display="flex" position="relative">
           <FormLabel htmlFor="input" />
@@ -246,7 +386,9 @@ const Home: FC<ProductPageProps> = ({ data }) => {
             type="text"
             placeholder="search your product here"
             fontFamily={"primary.heading"}
-            onChange={(e) => handleInputChange(e)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              handleInputChange(e)
+            }
           />
           <Icon
             as={AiOutlineSearch}
@@ -261,80 +403,50 @@ const Home: FC<ProductPageProps> = ({ data }) => {
             flexWrap={"wrap"}
             py="4rem"
             justifyContent="start"
-            w="87%"
+            alignItems="center"
+            w={["20%", "67%", "75%", "82%"]}
           >
             {mapCards}
           </Box>
+          {showModal && (
+            <ChakraModal isOpen={modalIsOpen} onClose={modalOnClose} />
+          )}
+
+          {state.length === 0 ? (
+            <Heading alignContent="center">
+              Oops ! No Item matches the selected filter
+            </Heading>
+          ) : null}
         </Stack>
       </VStack>
       <Flex
         p="2rem"
         flexDirection="column"
         pos="absolute"
-        right="1rem"
+        right="3rem"
         top="10.7rem"
         shadow="md"
       >
-        {/* <Flex>
-          <Button
-            variant="secondary"
-            value="apply"
-            type="submit"
-            onClick={(e) => handleCheckboxSubmit(e)}
-            mb="1rem"
-            outline={"2px solid"}
-            outlineColor="background.200"
-            disabled={disableButton}
-          >
-            Apply
-          </Button>
-          <Button
-            variant="secondary"
-            value="apply"
-            type="submit"
-            onClick={(e) => handleFormClear(e)}
-            mb="1rem"
-            outline={"2px solid"}
-            outlineColor="background.200"
-            ml="1rem"
-          >
-            Reset
-          </Button>
-        </Flex> */}
         <CheckBoxColourContainer
           heading="Colour"
           uniqueColouredItems={uniqueColouredItems}
-          selectedColours={selectedColoursData.selectedColours}
-          setSelectedColours={setSelectedColours}
-          data={data}
-          setState={setState}
-          state={state}
-          memory={memory}
-          setMemory={setMemory}
+          handleCheckBoxClick={handleCheckBoxClick}
         />
         <CheckBoxGenderContainer
           heading="Gender"
           uniqueGenderItems={uniqueGenderItems}
-          setSelectedGender={setSelectedGender}
-          selectedGender={selectedGenderData.selectedGender}
-          selectedColour={selectedColoursData.selectedColour}
-          data={data}
-          setState={setState}
-          state={state}
           handleCheckBoxClick={handleCheckBoxClick}
         />
-        {/* <CheckBoxPriceContainer
+        <CheckBoxPriceContainer
           heading="Price"
           uniquePriceItems={uniquePriceItems}
-          setSelectedPrice={setSelectedPrice}
-          setDisableButton={setDisableButton}
+          handleCheckBoxClick={handleCheckBoxClick}
         />
         <CheckBoxTypeContainer
           heading="Type"
           uniqueTypeItems={uniqueTypeItems}
-          setSelectedType={setSelectedType}
-          setDisableButton={setDisableButton}
-        /> */}
+          handleCheckBoxClick={handleCheckBoxClick}
+        />
       </Flex>
     </HStack>
   );

@@ -1,23 +1,17 @@
 import { Heading } from "@chakra-ui/react";
-import { Dispatch, FC, SetStateAction } from "react";
+import { FC } from "react";
 import ChakraTypeCheckBox from "./ChakraTypeCheckBox";
 
 interface CheckBoxTypeProps {
   heading: string;
   uniqueTypeItems: string[];
-  setSelectedType: Dispatch<
-    SetStateAction<{
-      selectedType: string[];
-    }>
-  >;
-  setDisableButton: any;
+  handleCheckBoxClick: any;
 }
 
 const CheckBoxTypeContainer: FC<CheckBoxTypeProps> = ({
   heading,
   uniqueTypeItems,
-  setSelectedType,
-  setDisableButton,
+  handleCheckBoxClick,
 }) => {
   return (
     <>
@@ -28,8 +22,7 @@ const CheckBoxTypeContainer: FC<CheckBoxTypeProps> = ({
         <ChakraTypeCheckBox
           item={item}
           key={index}
-          setSelectedType={setSelectedType}
-          setDisableButton={setDisableButton}
+          handleCheckBoxClick={handleCheckBoxClick}
         />
       ))}
     </>

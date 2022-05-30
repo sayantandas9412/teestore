@@ -1,23 +1,17 @@
 import { Heading } from "@chakra-ui/react";
-import { Dispatch, FC, SetStateAction } from "react";
+import { FC } from "react";
 import ChakraPriceCheckBox from "./ChakraPriceCheckBox";
 
 interface CheckBoxPriceProps {
   heading: string;
   uniquePriceItems: number[];
-  setSelectedPrice: Dispatch<
-    SetStateAction<{
-      selectedPrice: string[];
-    }>
-  >;
-  setDisableButton: any;
+  handleCheckBoxClick: any;
 }
 
 const CheckBoxPriceContainer: FC<CheckBoxPriceProps> = ({
   heading,
   uniquePriceItems,
-  setSelectedPrice,
-  setDisableButton,
+  handleCheckBoxClick,
 }) => {
   return (
     <>
@@ -28,8 +22,7 @@ const CheckBoxPriceContainer: FC<CheckBoxPriceProps> = ({
         <ChakraPriceCheckBox
           item={item}
           key={index}
-          setSelectedPrice={setSelectedPrice}
-          setDisableButton={setDisableButton}
+          handleCheckBoxClick={handleCheckBoxClick}
         />
       ))}
     </>

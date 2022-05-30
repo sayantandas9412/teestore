@@ -2,13 +2,15 @@ import { Box, HStack, Icon, ListItem, UnorderedList } from "@chakra-ui/react";
 import Link from "next/link";
 import Logo from "../Logo";
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { IconType } from "react-icons";
 import { useRouter } from "next/router";
 
-interface HeaderData {
+export interface HeaderData {
   logo: Logo;
   navItems: NavItem[];
+  quantity?: number;
+  showQuantity?: boolean;
 }
 interface Logo {
   title: string;
@@ -23,40 +25,9 @@ interface NavItem {
   showIcon?: boolean;
 }
 
-const headerData: HeaderData = {
-  logo: {
-    title: "ShansTees",
-    href: "/",
-  },
-  navItems: [
-    {
-      title: "Products",
-      href: "/",
-      showIcon: false,
-      active: true,
-    },
-  ],
-};
-
-const Header = () => {
-  //   const handleCartClick = (e?: any) => {
-  //     if (e?.target.innerHTML !== "Products") {
-  //       setNavItemsState((prevState) => {
-  //         return {
-  //           ...prevState,
-  //           showIcon: !prevState.showIcon,
-  //           active: true,
-  //         };
-  //       });
-  //     }
-  //   };
-
+const Header: FC<HeaderData> = ({ quantity, logo, navItems, showQuantity }) => {
   const router = useRouter();
-  const mapNavItems = (
-    navItem: NavItem,
-    showNavItem: boolean,
-    index: number
-  ) => {
+  const mapNavItems = (navItem: NavItem, index: number) => {
     return (
       <ListItem
         key={index}
@@ -75,10 +46,9 @@ const Header = () => {
   };
 
   const [showNavItem, setShowNavItem] = useState(false);
-  const [navItemsState, setNavItemsState] = useState(headerData.navItems[1]);
   return (
     <HStack justifyContent="space-between" bg="background.100" p="1rem">
-      <Logo title={headerData.logo.title} href={headerData.logo.href} />
+      <Logo title={logo.title} href={logo.href} />
       <Box display="flex">
         <UnorderedList
           display="flex"
@@ -87,15 +57,29 @@ const Header = () => {
           alignItems="center"
         >
           <>
-            {headerData.navItems.map((unit, index) =>
-              mapNavItems(unit, showNavItem, index)
-            )}
+            {navItems.map((unit, index) => mapNavItems(unit, index))}
             <ListItem tabIndex={0}>
               {router.pathname !== "/cart" ? (
-                <Box cursor="pointer">
+                <Box cursor="pointer" pos="relative">
                   <Link href="/cart">
                     <Icon as={AiOutlineShoppingCart} w={8} h={8} />
                   </Link>
+                  <Box
+                    display={showQuantity ? "block" : "none"}
+                    pos="absolute"
+                    top="-14px"
+                    right="-11px"
+                    border="1px solid orangered"
+                    bg="#ff4500b5"
+                    color="white"
+                    fontWeight="bold"
+                    borderRadius="20%"
+                    w={7}
+                    h={7}
+                    textAlign="center"
+                  >
+                    {quantity}
+                  </Box>
                 </Box>
               ) : (
                 <Box
