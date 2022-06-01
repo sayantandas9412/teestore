@@ -20,8 +20,9 @@ const Cart: FC<CartPageProps> = ({ cartItems, cartState, setCartState }) => {
     setTotalCartValue((prevState) => prevState - price);
   };
   useEffect(() => {
-    const cartValue = cartItems.reduce(
-      (previousValue, currentValue) => previousValue + currentValue.price,
+    const cartValue = cartState.reduce(
+      (previousValue: any, currentValue: any) =>
+        previousValue + currentValue.price,
       totalCartValue
     );
     setTotalCartValue(cartValue);
