@@ -21,7 +21,7 @@ const CartItem: FC<CartItemProps> = ({
   const [addButtonDisabled, setAddButtonDisabled] = useState(false);
   const [subtractButtonDisabled, setSubtractButtonDisabled] = useState(true);
   return (
-    <HStack my="0.5rem" shadow="md" p="2rem" w="30rem">
+    <HStack my="0.5rem" shadow="md" p={["1rem", "2rem"]} w={["22rem", "30rem"]}>
       <Box mr="1rem">
         <Image
           src={item.imageURL}
@@ -30,13 +30,13 @@ const CartItem: FC<CartItemProps> = ({
           height={100}
         />
       </Box>
-      <VStack mx="2rem">
+      <VStack mx={["0", "2rem"]} alignItems="flex-start">
         <Heading as="h4" size="md">
           {item.name}
         </Heading>
         <Box fontWeight="bold">Rs {item.price}</Box>
       </VStack>
-      <Box pl="3rem">
+      <Box pl={["0.25rem", "3rem"]}>
         <Quantity
           quantity={quantity}
           setQuantity={setQuantity}
@@ -54,6 +54,8 @@ const CartItem: FC<CartItemProps> = ({
         _hover={{ bg: "#ff4500b5", color: "white" }}
         onClick={() => handleDeleteButtonClick(item.id, item.price)}
         display={quantity == 1 ? "block" : "none"}
+        fontSize={["smaller", "inherit"]}
+        width={["auto", "6rem"]}
       >
         Delete
       </Button>

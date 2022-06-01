@@ -65,9 +65,9 @@ const Header: FC<HeaderData> = ({ quantity, logo, navItems }) => {
                   <Box
                     display={quantity !== 0 ? "block" : "none"}
                     pos="absolute"
-                    top="-17px"
+                    top="-15px"
                     right="-24px"
-                    border="1px solid #ff4500b5"
+                    border="1px solid #eee"
                     bg="#ff4500b5"
                     color="white"
                     fontWeight="bold"
