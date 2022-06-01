@@ -2,7 +2,7 @@ import { Box, HStack, Icon, ListItem, UnorderedList } from "@chakra-ui/react";
 import Link from "next/link";
 import Logo from "../Logo";
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { IconType } from "react-icons";
 import { useRouter } from "next/router";
 
@@ -84,7 +84,7 @@ const Header: FC<HeaderData> = ({ quantity, logo, navItems }) => {
                   borderBottom="2px solid black"
                   fontFamily="primary.heading"
                 >
-                  <Link href="/cart">Shopping Cart</Link>
+                  <Link href="/cart"> Cart</Link>
                 </Box>
               )}
             </ListItem>

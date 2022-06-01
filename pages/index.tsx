@@ -88,6 +88,8 @@ const Home: FC<ProductPageProps> = ({
     selectedType: [],
   });
 
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+
   // useEffect(() => {
   //   const localStorageData = JSON.parse(window.localStorage.getItem("data"));
   //   setState(localStorageData);
@@ -337,12 +339,12 @@ const Home: FC<ProductPageProps> = ({
     return (
       <Box key={index}>
         <Box
-          p="1.5rem"
+          p={["0.75rem", "1.5rem"]}
           shadow="lg"
-          w="250px"
-          h="200px"
+          w={["162px", "250px"]}
+          h={["153px", "200px"]}
           display="flex"
-          my="2rem"
+          my={["1rem", "2rem"]}
           mx="1rem"
           position="relative"
           justifyContent="center"
@@ -361,7 +363,7 @@ const Home: FC<ProductPageProps> = ({
               <Box color="background.300">Sold Out !</Box>
             ) : null}
           </Heading>
-          <Box>
+          <Box w={[70, 100]}>
             <Image
               alt="item-image"
               src={item.imageURL ?? "/error.jpeg"}
@@ -391,7 +393,7 @@ const Home: FC<ProductPageProps> = ({
           <Input
             id="input"
             type="text"
-            placeholder="search your product here"
+            placeholder="search here"
             fontFamily={"primary.heading"}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleInputChange(e)
@@ -409,9 +411,9 @@ const Home: FC<ProductPageProps> = ({
             display="flex"
             flexWrap={"wrap"}
             py="4rem"
-            justifyContent="start"
+            justifyContent={["center", "start"]}
             alignItems="center"
-            w={["20%", "67%", "75%", "82%"]}
+            w={["100%", "67%", "75%", "82%"]}
           >
             {mapCards}
           </Box>
@@ -433,6 +435,7 @@ const Home: FC<ProductPageProps> = ({
         right="3rem"
         top="10.7rem"
         shadow="md"
+        display={[showFilterMenu ? "flex" : "none", "flex"]}
       >
         <CheckBoxColourContainer
           heading="Colour"

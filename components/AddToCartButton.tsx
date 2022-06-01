@@ -23,8 +23,11 @@ const AddToCartButton: FC<AddToCartButtonProps> = ({
       outlineColor="background.200"
       variant="secondary"
       position="absolute"
-      bottom="0.5rem"
+      bottom="14px"
       right="0.5rem"
+      fontSize="smaller"
+      w="82px"
+      h="25px"
       _hover={{ background: "#1515c5a8", color: "white" }}
       onClick={() => handleAddCartButtonClick(id)}
       disabled={maxQuantity === 0 || disableAddCartButton}
@@ -34,8 +37,11 @@ const AddToCartButton: FC<AddToCartButtonProps> = ({
   ) : (
     <Button
       position="absolute"
-      bottom="0.5rem"
+      bottom="14px"
       right="0.5rem"
+      fontSize="smaller"
+      w="82px"
+      h="25px"
       background={"background.300"}
       _focus={{ border: "none" }}
       _hover={{ background: "#eee", color: "black" }}
