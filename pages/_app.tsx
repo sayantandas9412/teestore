@@ -4,7 +4,6 @@ import { extendTheme, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import BaseComponent from "../components/BaseComponent/BaseComponent";
-import ChakraModal from "../components/Modal";
 import { Data } from ".";
 
 const colors = {
@@ -22,7 +21,7 @@ const colors = {
 
 const fonts = {
   primary: {
-    heading: "sans-serif cursive",
+    heading: `'Raleway', sans-serif `,
   },
 };
 const theme = extendTheme({ colors, fonts });
@@ -30,7 +29,6 @@ let cartItems: Data[] = [];
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [quantity, setQuantity] = useState(0);
-  const [showQuantity, setShowQuantity] = useState(false);
   const [disableAddCartButton, setDisableAddCartButton] = useState(false);
   const [cartState, setCartState] = useState({ data: [] });
   const [showModal, setShowModal] = useState(false);
@@ -38,7 +36,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   let itemPresentInCart;
   const handleAddCartClick = (id: number, state: any, setState: any) => {
     onOpen();
-    setShowQuantity(true);
     setDisableAddCartButton(true);
     const cartItem = state
       .filter((item: any) => item.id === id)
@@ -61,24 +58,25 @@ function MyApp({ Component, pageProps }: AppProps) {
       setShowModal(true);
       itemPresentInCart = [];
     } else setShowModal(false);
-    let filter = [];
-    // cartItems = [...cartItems, state.filter((item: any) => item.id === id)];
     cartItems.push(...cartItem);
     setState(result);
     cartItems = cartItems.filter(
       (value, index, array) =>
         index === array.findIndex((child) => child.id === value.id)
     );
-    setQuantity(cartItems.length);
+
     itemPresentInCart = cartState.data.filter(
       (child: any) => child.id === cartItem[0].id
     );
   };
-  // useEffect(() => {}, [cartState]);
+  useEffect(() => {
+    console.log(cartState);
+    setQuantity(cartState.data.length);
+  }, [cartState]);
 
   return (
     <ChakraProvider theme={theme}>
-      <BaseComponent quantity={quantity} showQuantity={showQuantity}>
+      <BaseComponent quantity={quantity}>
         <Component
           {...pageProps}
           quantity={quantity}
@@ -88,6 +86,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           modalIsOpen={isOpen}
           modalOnClose={onClose}
           cartItems={cartItems}
+          setCartState={setCartState}
+          cartState={cartState.data}
         />
       </BaseComponent>
     </ChakraProvider>

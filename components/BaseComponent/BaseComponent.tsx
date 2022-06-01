@@ -7,17 +7,12 @@ import Layout from "../Layout/Layout";
 interface BaseComponentProps {
   children?: any;
   quantity?: number;
-  showQuantity?: boolean;
 }
 
-const BaseComponent: FC<BaseComponentProps> = ({
-  children,
-  quantity,
-  showQuantity,
-}) => {
+const BaseComponent: FC<BaseComponentProps> = ({ children, quantity }) => {
   const headerData: HeaderData = {
     logo: {
-      title: "ShansTees",
+      title: "TeeStore",
       href: "/",
     },
     navItems: [
@@ -31,7 +26,7 @@ const BaseComponent: FC<BaseComponentProps> = ({
   };
   return (
     <Layout>
-      <Header {...headerData} quantity={quantity} showQuantity={showQuantity} />
+      <Header {...headerData} quantity={quantity} />
       <Box minH="110vh">{children}</Box>
       <Footer />
     </Layout>

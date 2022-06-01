@@ -10,7 +10,6 @@ export interface HeaderData {
   logo: Logo;
   navItems: NavItem[];
   quantity?: number;
-  showQuantity?: boolean;
 }
 interface Logo {
   title: string;
@@ -25,7 +24,7 @@ interface NavItem {
   showIcon?: boolean;
 }
 
-const Header: FC<HeaderData> = ({ quantity, logo, navItems, showQuantity }) => {
+const Header: FC<HeaderData> = ({ quantity, logo, navItems }) => {
   const router = useRouter();
   const mapNavItems = (navItem: NavItem, index: number) => {
     return (
@@ -45,7 +44,6 @@ const Header: FC<HeaderData> = ({ quantity, logo, navItems, showQuantity }) => {
     );
   };
 
-  const [showNavItem, setShowNavItem] = useState(false);
   return (
     <HStack justifyContent="space-between" bg="background.100" p="1rem">
       <Logo title={logo.title} href={logo.href} />
@@ -65,11 +63,11 @@ const Header: FC<HeaderData> = ({ quantity, logo, navItems, showQuantity }) => {
                     <Icon as={AiOutlineShoppingCart} w={8} h={8} />
                   </Link>
                   <Box
-                    display={showQuantity ? "block" : "none"}
+                    display={quantity !== 0 ? "block" : "none"}
                     pos="absolute"
-                    top="-14px"
-                    right="-11px"
-                    border="1px solid orangered"
+                    top="-17px"
+                    right="-24px"
+                    border="1px solid #ff4500b5"
                     bg="#ff4500b5"
                     color="white"
                     fontWeight="bold"

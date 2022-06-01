@@ -1,19 +1,24 @@
-import { Box, Heading, HStack, Select, VStack } from "@chakra-ui/react";
-import Image from "next/image";
+import { Box, Heading, HStack } from "@chakra-ui/react";
 import React, { FC, useEffect, useState } from "react";
 import { Data } from ".";
+import CartItem from "../components/CartItem";
 
 export interface CartPageProps {
   cartItems: Data[];
+  cartState: any;
+  setCartState: any;
 }
 
-const cart: FC<CartPageProps> = ({ cartItems }) => {
-  const [selectedQuantity, setSelectedQuantity] = useState(1);
+const Cart: FC<CartPageProps> = ({ cartItems, cartState, setCartState }) => {
   const [totalCartValue, setTotalCartValue] = useState(0);
-  let itemPrice = totalCartValue;
-  let initialQuantity = 1;
-  let cartItemPrice = totalCartValue;
 
+  const handleDeleteButtonClick = (id: number, price: number) => {
+    const filteredCartItems = cartState.filter(
+      (child: any) => Number(child.id) !== Number(id)
+    );
+    setCartState({ data: filteredCartItems });
+    setTotalCartValue((prevState) => prevState - price);
+  };
   useEffect(() => {
     const cartValue = cartItems.reduce(
       (previousValue, currentValue) => previousValue + currentValue.price,
@@ -21,62 +26,6 @@ const cart: FC<CartPageProps> = ({ cartItems }) => {
     );
     setTotalCartValue(cartValue);
   }, []);
-
-  const mapCartItems = cartItems.map((item, index) => {
-    const mapOptionForItem = Array(item.quantity)
-      .fill(item.quantity)
-      .map((child, index) => {
-        return (
-          <option value={index + 1} key={index}>
-            {index + 1}
-          </option>
-        );
-      });
-
-    const handleQuantityChange = (e: any, price: number) => {
-      setSelectedQuantity(e.target.value);
-      if (selectedQuantity > e.target.value) {
-        cartItemPrice =
-          cartItemPrice - (selectedQuantity - Number(e.target.value)) * price;
-        itemPrice = itemPrice - cartItemPrice + price;
-        setTotalCartValue(itemPrice);
-        console.log(cartItemPrice);
-      } else {
-        cartItemPrice = Number(e.target.value) * price;
-        // itemPrice = totalCartValue + cartItemPrice - price;
-        setTotalCartValue(cartItemPrice);
-        console.log(itemPrice, cartItemPrice);
-      }
-    };
-
-    return (
-      <HStack my="0.5rem" key={index} shadow="md" p="2rem">
-        <Box mr="1rem">
-          <Image
-            src={item.imageURL}
-            alt="product-image"
-            width={100}
-            height={100}
-          />
-        </Box>
-        <VStack mx="2rem">
-          <Heading as="h4" size="md">
-            {item.name}
-          </Heading>
-          <Box>Rs {item.price}</Box>
-        </VStack>
-        <Box pl="3rem">
-          <Select
-            placeholder="Select quantity"
-            onChange={(e: any) => handleQuantityChange(e, item.price)}
-            cursor="pointer"
-          >
-            {mapOptionForItem}
-          </Select>
-        </Box>
-      </HStack>
-    );
-  });
 
   return (
     <Box
@@ -96,19 +45,30 @@ const cart: FC<CartPageProps> = ({ cartItems }) => {
         alignItems="center"
         my="2rem"
       >
-        {mapCartItems}
+        {cartState.map((item: any, index: number) => (
+          <CartItem
+            key={index}
+            handleDeleteButtonClick={handleDeleteButtonClick}
+            totalCartValue={totalCartValue}
+            setTotalCartValue={setTotalCartValue}
+            item={item}
+          />
+        ))}
       </Box>
-      {cartItems.length !== 0 && (
-        <>
-          <Heading size="md">Total Cart Value: </Heading>
-          <Box>Rs {totalCartValue}</Box>
-        </>
+
+      {cartState.length !== 0 && totalCartValue != 0 && (
+        <HStack>
+          <Heading size="md">
+            Total Cart Value:{" "}
+            <span style={{ color: "#1515c5a8" }}>Rs {totalCartValue}</span>
+          </Heading>
+        </HStack>
       )}
-      {cartItems.length === 0 ? (
+      {cartState.length === 0 || totalCartValue === 0 ? (
         <Heading size="lg">Cart is empty! Keep shopping</Heading>
       ) : null}
     </Box>
   );
 };
 
-export default cart;
+export default Cart;
