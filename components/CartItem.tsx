@@ -52,7 +52,7 @@ const CartItem: FC<CartItemProps> = ({
       </Box>
       <Button
         _hover={{ bg: "#ff4500b5", color: "white" }}
-        onClick={(e) => handleDeleteButtonClick(item.id, item.price)}
+        onClick={() => handleDeleteButtonClick(item.id, item.price)}
         display={quantity == 1 ? "block" : "none"}
       >
         Delete

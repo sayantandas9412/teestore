@@ -15,7 +15,7 @@ const Footer = () => {
     >
       <Box pr="0.5rem">Made with </Box>
       <Icon as={AiFillHeart} color="orangered" />
-      <Box ml="0.5rem">King Shan's</Box>
+      <Box ml="0.5rem">{`King Shan's`}</Box>
       <Icon as={AiOutlineCopyrightCircle} ml="0.5rem" />
     </Box>
   );

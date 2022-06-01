@@ -29,7 +29,7 @@ const Quantity: FC<QuantityProps> = ({
     if (quantity <= 1) {
       setSubtractButtonDisabled(true);
     }
-  }, [quantity]);
+  }, [quantity, setSubtractButtonDisabled]);
 
   const handleAddClick = () => {
     setSubtractButtonDisabled(false);

@@ -152,6 +152,13 @@ const Home: FC<ProductPageProps> = ({
     priceData.price,
     selectedTypeData.selectedType,
     typeData.type,
+    colourData,
+    genderData,
+    priceData,
+    typeData,
+    isSearched,
+    searchedItems,
+    data,
   ]);
 
   const handleCheckBoxClick = (e: any) => {
