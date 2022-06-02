@@ -58,7 +58,7 @@ const Cart: FC<CartPageProps> = ({ cartItems, cartState, setCartState }) => {
       </Box>
 
       {cartState.length !== 0 && totalCartValue != 0 && (
-        <HStack>
+        <HStack mb="3rem">
           <Heading size="md">
             Total Cart Value:{" "}
             <span style={{ color: "#1515c5a8" }}>Rs {totalCartValue}</span>

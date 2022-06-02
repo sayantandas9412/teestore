@@ -26,9 +26,10 @@ const AddToCartButton: FC<AddToCartButtonProps> = ({
       bottom="14px"
       right="0.5rem"
       fontSize="smaller"
-      w="82px"
-      h="25px"
+      w={["82px", "100px"]}
+      h={["25px", "35px"]}
       _hover={{ background: "#1515c5a8", color: "white" }}
+      _focus={{ background: "#1515c5a8", color: "white" }}
       onClick={() => handleAddCartButtonClick(id)}
       disabled={maxQuantity === 0 || disableAddCartButton}
     >
@@ -40,12 +41,12 @@ const AddToCartButton: FC<AddToCartButtonProps> = ({
       bottom="14px"
       right="0.5rem"
       fontSize="smaller"
-      w="82px"
-      h="25px"
-      background={"background.300"}
+      w={["82px", "100px"]}
+      h={["25px", "35px"]}
+      background={["#eee", "background.300"]}
       _focus={{ border: "none" }}
       _hover={{ background: "#eee", color: "black" }}
-      color="white"
+      color={["black", "white"]}
     >
       <Link href="/cart">Go to cart</Link>
     </Button>

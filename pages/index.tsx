@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Flex,
   FormControl,
   FormLabel,
@@ -11,9 +12,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import Router from "next/router";
 import { ChangeEvent, FC, useEffect, useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiFillFilter, AiOutlineSearch } from "react-icons/ai";
 import AddToCartButton from "../components/AddToCartButton";
 import CheckBoxColourContainer from "../components/ColourCheckBox/CheckBoxColourContainer";
 import CheckBoxGenderContainer from "../components/GenderCheckBox/CheckBoxGenderContainer";
@@ -89,15 +89,6 @@ const Home: FC<ProductPageProps> = ({
   });
 
   const [showFilterMenu, setShowFilterMenu] = useState(false);
-
-  // useEffect(() => {
-  //   const localStorageData = JSON.parse(window.localStorage.getItem("data"));
-  //   setState(localStorageData);
-  // }, []);
-
-  // useEffect(() => {
-  //   window.localStorage.setItem("data", JSON.stringify(state));
-  // }, [state]);
 
   useEffect(() => {
     const filters: Filters = {
@@ -386,9 +377,20 @@ const Home: FC<ProductPageProps> = ({
     );
   });
   return (
-    <HStack alignItems="center" justifyContent="center" pos="relative">
+    <HStack
+      alignItems="center"
+      justifyContent="center"
+      pos="relative"
+      display={["block", "flex"]}
+    >
       <VStack>
-        <FormControl w="60%" mt="2rem" display="flex" position="relative">
+        <FormControl
+          w={["100%", "60%"]}
+          mt="2rem"
+          display="flex"
+          position="relative"
+          alignItems="center"
+        >
           <FormLabel htmlFor="input" />
           <Input
             id="input"
@@ -399,19 +401,28 @@ const Home: FC<ProductPageProps> = ({
               handleInputChange(e)
             }
           />
+
           <Icon
-            as={AiOutlineSearch}
             position="absolute"
-            right="1rem"
             top="0.75rem"
+            right={["4.375rem", "1.375rem"]}
+            as={AiOutlineSearch}
           />
+
+          <Button
+            mx="0.5rem"
+            display={["flex", "none"]}
+            onClick={() => setShowFilterMenu((prevState) => !prevState)}
+          >
+            <Icon as={AiFillFilter} />
+          </Button>
         </FormControl>
         <Stack>
           <Box
-            display="flex"
+            display={[showFilterMenu ? "none" : "flex", "flex"]}
             flexWrap={"wrap"}
             py="4rem"
-            justifyContent={["center", "start"]}
+            justifyContent={"start"}
             alignItems="center"
             w={["100%", "67%", "75%", "82%"]}
           >
@@ -431,12 +442,18 @@ const Home: FC<ProductPageProps> = ({
       <Flex
         p="2rem"
         flexDirection="column"
-        pos="absolute"
+        pos={["static", "absolute"]}
         right="3rem"
         top="10.7rem"
-        shadow="md"
+        shadow={["none", "md"]}
         display={[showFilterMenu ? "flex" : "none", "flex"]}
       >
+        <Button
+          display={["flex", "none"]}
+          onClick={() => setShowFilterMenu(false)}
+        >
+          Apply
+        </Button>
         <CheckBoxColourContainer
           heading="Colour"
           uniqueColouredItems={uniqueColouredItems}

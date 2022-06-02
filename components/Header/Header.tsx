@@ -53,6 +53,7 @@ const Header: FC<HeaderData> = ({ quantity, logo, navItems }) => {
           listStyleType="none"
           px="2rem"
           alignItems="center"
+          pr="1rem"
         >
           <>
             {navItems.map((unit, index) => mapNavItems(unit, index))}

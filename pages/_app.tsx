@@ -21,7 +21,7 @@ const colors = {
 
 const fonts = {
   primary: {
-    heading: `'Raleway', sans-serif `,
+    heading: `'Josefin Sans', sans-serif `,
   },
 };
 const theme = extendTheme({ colors, fonts });

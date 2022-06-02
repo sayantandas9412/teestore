@@ -22,7 +22,7 @@ const CartItem: FC<CartItemProps> = ({
   const [subtractButtonDisabled, setSubtractButtonDisabled] = useState(true);
   return (
     <HStack my="0.5rem" shadow="md" p={["1rem", "2rem"]} w={["22rem", "30rem"]}>
-      <Box mr="1rem">
+      <Box mr="1rem" w={[50, 50]}>
         <Image
           src={item.imageURL}
           alt="product-image"
@@ -30,8 +30,13 @@ const CartItem: FC<CartItemProps> = ({
           height={100}
         />
       </Box>
-      <VStack mx={["0", "2rem"]} alignItems="flex-start">
-        <Heading as="h4" size="md">
+      <VStack
+        mx={["0", "2rem"]}
+        alignItems="flex-start"
+        fontSize={["sm", "md"]}
+        w={["5rem", ""]}
+      >
+        <Heading as="h4" fontSize={["sm", "md", "larger"]}>
           {item.name}
         </Heading>
         <Box fontWeight="bold">Rs {item.price}</Box>
