@@ -1,3 +1,5 @@
+export {};
+
 describe("filterByCategories.cy.ts", () => {
   it("should visit the products page and filter items by single colour", () => {
     cy.visit("localhost:3000/");

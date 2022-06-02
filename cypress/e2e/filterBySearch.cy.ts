@@ -1,3 +1,4 @@
+export {};
 describe("filterBySearch.cy.ts", () => {
   it("should visit products page and filter by search", () => {
     cy.visit("localhost:3000/");
