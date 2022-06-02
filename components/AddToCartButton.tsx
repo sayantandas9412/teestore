@@ -32,6 +32,7 @@ const AddToCartButton: FC<AddToCartButtonProps> = ({
       _focus={{ background: "#1515c5a8", color: "white" }}
       onClick={() => handleAddCartButtonClick(id)}
       disabled={maxQuantity === 0 || disableAddCartButton}
+      data-test-element="action-add-cart"
     >
       {title}
     </Button>
@@ -47,6 +48,7 @@ const AddToCartButton: FC<AddToCartButtonProps> = ({
       _focus={{ border: "none" }}
       _hover={{ background: "#eee", color: "black" }}
       color={["black", "white"]}
+      data-test-element="action-go-to-cart"
     >
       <Link href="/cart">Go to cart</Link>
     </Button>

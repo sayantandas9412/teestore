@@ -23,6 +23,7 @@ const ChakraGenderCheckBox: FC<ChakraGenderCheckBox> = ({
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
         handleCheckboxChange(e)
       }
+      data-element-checkbox-gender="action-gender"
     >
       {item}
     </Checkbox>

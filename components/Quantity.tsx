@@ -52,13 +52,21 @@ const Quantity: FC<QuantityProps> = ({
 
   return (
     <Box>
-      <Button disabled={addButtonDisabled} onClick={handleAddClick}>
+      <Button
+        disabled={addButtonDisabled}
+        onClick={handleAddClick}
+        data-test-element="action-add-quantity"
+      >
         +
       </Button>
       <Box textAlign="center" fontWeight="bold">
         {quantity}
       </Box>
-      <Button onClick={handleSubtractClick} disabled={subtractButtonDisabled}>
+      <Button
+        onClick={handleSubtractClick}
+        disabled={subtractButtonDisabled}
+        data-test-element="action-subtract-quantity"
+      >
         -
       </Button>
     </Box>

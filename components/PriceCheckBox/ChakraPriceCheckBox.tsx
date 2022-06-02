@@ -22,6 +22,7 @@ const ChakraPriceCheckBox: FC<ChakraPriceCheckBoxProps> = ({
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
         handleCheckboxChange(e)
       }
+      data-element-checkbox-price="action-price"
     >
       {item}
     </Checkbox>

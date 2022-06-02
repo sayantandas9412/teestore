@@ -57,7 +57,7 @@ const Header: FC<HeaderData> = ({ quantity, logo, navItems }) => {
         >
           <>
             {navItems.map((unit, index) => mapNavItems(unit, index))}
-            <ListItem tabIndex={0}>
+            <ListItem tabIndex={0} data-test-element="navigation-cart">
               {router.pathname !== "/cart" ? (
                 <Box cursor="pointer" pos="relative">
                   <Link href="/cart">
@@ -85,7 +85,7 @@ const Header: FC<HeaderData> = ({ quantity, logo, navItems }) => {
                   borderBottom="2px solid black"
                   fontFamily="primary.heading"
                 >
-                  <Link href="/cart"> Cart</Link>
+                  <Link href="/cart">Cart</Link>
                 </Box>
               )}
             </ListItem>

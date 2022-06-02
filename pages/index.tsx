@@ -53,9 +53,7 @@ interface Filters {
 
 const Home: FC<ProductPageProps> = ({
   data,
-  quantity,
   handleAddCartClick,
-  disableAddCartButton,
   showModal,
   modalIsOpen,
   modalOnClose,
@@ -336,10 +334,12 @@ const Home: FC<ProductPageProps> = ({
           h={["153px", "200px"]}
           display="flex"
           my={["1rem", "2rem"]}
-          mx="1rem"
+          mx={["0.5rem", "0.5rem", "1rem"]}
           position="relative"
           justifyContent="center"
           alignItems="center"
+          data-test-id={`cards-${index}`}
+          data-test-element="cards"
         >
           <Heading
             size="xs"
@@ -381,7 +381,7 @@ const Home: FC<ProductPageProps> = ({
       alignItems="center"
       justifyContent="center"
       pos="relative"
-      display={["block", "flex"]}
+      display={["block", "block"]}
     >
       <VStack>
         <FormControl
@@ -400,6 +400,7 @@ const Home: FC<ProductPageProps> = ({
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleInputChange(e)
             }
+            data-element-search="action-search"
           />
 
           <Icon
@@ -422,7 +423,7 @@ const Home: FC<ProductPageProps> = ({
             display={[showFilterMenu ? "none" : "flex", "flex"]}
             flexWrap={"wrap"}
             py="4rem"
-            justifyContent={"start"}
+            justifyContent={["center", "start"]}
             alignItems="center"
             w={["100%", "67%", "75%", "82%"]}
           >
@@ -432,9 +433,13 @@ const Home: FC<ProductPageProps> = ({
             <ChakraModal isOpen={modalIsOpen} onClose={modalOnClose} />
           )}
 
-          {state.length === 0 ? (
-            <Heading alignContent="center">
-              Oops ! No Item matches the selected filter
+          {state.length === 0 && showFilterMenu === false ? (
+            <Heading
+              alignContent="center"
+              size="md"
+              data-test-id="action-no-match"
+            >
+              Oops ! No Item matches <br /> the selected filter
             </Heading>
           ) : null}
         </Stack>

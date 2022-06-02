@@ -22,6 +22,7 @@ const ChakraTypeCheckBox: FC<ChakraTypeCheckBoxProps> = ({
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
         handleCheckboxChange(e)
       }
+      data-element-checkbox-type="action-type"
     >
       {item}
     </Checkbox>

@@ -59,14 +59,16 @@ const Cart: FC<CartPageProps> = ({ cartItems, cartState, setCartState }) => {
 
       {cartState.length !== 0 && totalCartValue != 0 && (
         <HStack mb="3rem">
-          <Heading size="md">
+          <Heading size="md" data-test-element="cart-price">
             Total Cart Value:{" "}
             <span style={{ color: "#1515c5a8" }}>Rs {totalCartValue}</span>
           </Heading>
         </HStack>
       )}
       {cartState.length === 0 || totalCartValue === 0 ? (
-        <Heading size="lg">Cart is empty! Keep shopping</Heading>
+        <Heading size="lg" data-test-id="action-error">
+          Cart is empty! Keep shopping
+        </Heading>
       ) : null}
     </Box>
   );

@@ -21,7 +21,13 @@ const CartItem: FC<CartItemProps> = ({
   const [addButtonDisabled, setAddButtonDisabled] = useState(false);
   const [subtractButtonDisabled, setSubtractButtonDisabled] = useState(true);
   return (
-    <HStack my="0.5rem" shadow="md" p={["1rem", "2rem"]} w={["22rem", "30rem"]}>
+    <HStack
+      my="0.5rem"
+      shadow="md"
+      p={["1rem", "2rem"]}
+      w={["22rem", "30rem"]}
+      data-test-element="cart-item"
+    >
       <Box mr="1rem" w={[50, 50]}>
         <Image
           src={item.imageURL}
@@ -61,6 +67,7 @@ const CartItem: FC<CartItemProps> = ({
         display={quantity == 1 ? "block" : "none"}
         fontSize={["smaller", "inherit"]}
         width={["auto", "6rem"]}
+        data-test-element="action-delete-item"
       >
         Delete
       </Button>

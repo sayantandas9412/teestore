@@ -23,6 +23,7 @@ const ChakraColourCheckbox: FC<ChakraColourCheckbox> = ({
       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
         handleCheckboxChange(e)
       }
+      data-element-checkbox-colour="action-color"
     >
       {item}
     </Checkbox>
