@@ -11,6 +11,8 @@ export interface CartPageProps {
 const Cart: FC<CartPageProps> = ({ cartState, setCartState }) => {
   const [totalCartValue, setTotalCartValue] = useState(0);
 
+  // get the total cart value on mount
+
   useEffect(() => {
     const cartValue = cartState.reduce(
       (previousValue: number, currentValue: Data) =>
