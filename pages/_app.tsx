@@ -43,17 +43,20 @@ function MyApp({ Component, pageProps }: AppProps) {
         return { ...item, disabled: true };
       });
 
+    itemPresentInCart = cartState.data.filter(
+      (child: any) => child.id === cartItem[0].id
+    );
     setCartState((prevState): any => {
-      return { data: [...prevState.data, cartItem[0]] };
+      if (itemPresentInCart.length === 0) {
+        return { data: [...prevState.data, cartItem[0]] };
+      } else return { data: prevState.data };
     });
     const result = state.map((data: any) => {
       if (data.id === id) {
         return { ...data, disabled: true };
       } else return data;
     });
-    itemPresentInCart = cartState.data.filter(
-      (child: any) => child.id === cartItem[0].id
-    );
+
     if (itemPresentInCart.length !== 0) {
       setShowModal(true);
       itemPresentInCart = [];
@@ -70,7 +73,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     );
   };
   useEffect(() => {
-    console.log(cartState);
     setQuantity(cartState.data.length);
   }, [cartState]);
 

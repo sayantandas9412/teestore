@@ -12,6 +12,10 @@ interface QuantityProps {
   totalCartValue: number;
   setTotalCartValue: any;
   price: number;
+  cartState: any;
+  id: number;
+  setCartState: any;
+  orderedQuantity: number;
 }
 
 const Quantity: FC<QuantityProps> = ({
@@ -24,12 +28,27 @@ const Quantity: FC<QuantityProps> = ({
   setSubtractButtonDisabled,
   setTotalCartValue,
   price,
+  cartState,
+  id,
+  setCartState,
+  orderedQuantity,
 }) => {
   useEffect(() => {
-    if (quantity <= 1) {
+    if (orderedQuantity < maxQuantity) {
+      setAddButtonDisabled(false);
+      setSubtractButtonDisabled(false);
+    }
+    if (orderedQuantity === 1) {
       setSubtractButtonDisabled(true);
     }
-  }, [quantity, setSubtractButtonDisabled]);
+    if (orderedQuantity === maxQuantity) {
+      setSubtractButtonDisabled(false);
+      setAddButtonDisabled(true);
+    }
+    if (maxQuantity === 1) {
+      setSubtractButtonDisabled(true);
+    }
+  }, [orderedQuantity]);
 
   const handleAddClick = () => {
     setSubtractButtonDisabled(false);
@@ -39,6 +58,13 @@ const Quantity: FC<QuantityProps> = ({
       setAddButtonDisabled(true);
       setSubtractButtonDisabled(false);
     }
+
+    const result = cartState.map((data: any) => {
+      if (data.id === id) {
+        return { ...data, orderedQuantity: quantity + 1 };
+      } else return data;
+    });
+    setCartState({ data: result });
   };
 
   const handleSubtractClick = () => {
@@ -48,6 +74,12 @@ const Quantity: FC<QuantityProps> = ({
       setQuantity(1);
       setSubtractButtonDisabled(true);
     } else setQuantity((prevState: any) => prevState - 1);
+    const result = cartState.map((data: any) => {
+      if (data.id === id) {
+        return { ...data, orderedQuantity: orderedQuantity - 1 };
+      } else return data;
+    });
+    setCartState({ data: result });
   };
 
   return (
@@ -60,7 +92,7 @@ const Quantity: FC<QuantityProps> = ({
         +
       </Button>
       <Box textAlign="center" fontWeight="bold">
-        {quantity}
+        {orderedQuantity}
       </Box>
       <Button
         onClick={handleSubtractClick}

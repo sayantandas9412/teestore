@@ -33,9 +33,6 @@ const ChakraModal = ({ isOpen, onClose }: ModalProps) => {
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost" outline="1px solid #eee">
-              <Link href="/cart">Go to cart</Link>
-            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

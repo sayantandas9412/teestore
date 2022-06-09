@@ -6,20 +6,41 @@ import Quantity from "./Quantity";
 
 export interface CartItemProps {
   item: Data;
-  handleDeleteButtonClick: any;
   totalCartValue: number;
   setTotalCartValue: any;
+  cartState: any;
+  setCartState: any;
+  orderedQuantity: number;
 }
 
 const CartItem: FC<CartItemProps> = ({
   item,
-  handleDeleteButtonClick,
   totalCartValue,
   setTotalCartValue,
+  cartState,
+  setCartState,
+  orderedQuantity,
 }) => {
   const [quantity, setQuantity] = useState(1);
   const [addButtonDisabled, setAddButtonDisabled] = useState(false);
   const [subtractButtonDisabled, setSubtractButtonDisabled] = useState(true);
+  const handleDeleteButtonClick = (id: number, price: number) => {
+    const filteredCartItems = cartState.filter(
+      (child: any) => Number(child.id) !== Number(id)
+    );
+
+    if (item.quantity === orderedQuantity) {
+      setSubtractButtonDisabled(false);
+    }
+
+    if (orderedQuantity < item.quantity) {
+      setAddButtonDisabled(false);
+    }
+
+    setCartState({ data: filteredCartItems });
+    setQuantity(orderedQuantity);
+    setTotalCartValue((prevState: any) => prevState - price);
+  };
   return (
     <HStack
       my="0.5rem"
@@ -59,12 +80,21 @@ const CartItem: FC<CartItemProps> = ({
           totalCartValue={totalCartValue}
           setTotalCartValue={setTotalCartValue}
           price={item.price}
+          id={item.id}
+          cartState={cartState}
+          setCartState={setCartState}
+          orderedQuantity={orderedQuantity}
         />
       </Box>
       <Button
         _hover={{ bg: "#ff4500b5", color: "white" }}
         onClick={() => handleDeleteButtonClick(item.id, item.price)}
-        display={quantity == 1 ? "block" : "none"}
+        display={
+          (orderedQuantity == 1 && orderedQuantity !== item.quantity) ||
+          item.quantity === 1
+            ? "block"
+            : "none"
+        }
         fontSize={["smaller", "inherit"]}
         width={["auto", "6rem"]}
         data-test-element="action-delete-item"

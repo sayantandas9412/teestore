@@ -12,13 +12,6 @@ export interface CartPageProps {
 const Cart: FC<CartPageProps> = ({ cartItems, cartState, setCartState }) => {
   const [totalCartValue, setTotalCartValue] = useState(0);
 
-  const handleDeleteButtonClick = (id: number, price: number) => {
-    const filteredCartItems = cartState.filter(
-      (child: any) => Number(child.id) !== Number(id)
-    );
-    setCartState({ data: filteredCartItems });
-    setTotalCartValue((prevState) => prevState - price);
-  };
   useEffect(() => {
     const cartValue = cartState.reduce(
       (previousValue: any, currentValue: any) =>
@@ -49,10 +42,12 @@ const Cart: FC<CartPageProps> = ({ cartItems, cartState, setCartState }) => {
         {cartState.map((item: any, index: number) => (
           <CartItem
             key={index}
-            handleDeleteButtonClick={handleDeleteButtonClick}
             totalCartValue={totalCartValue}
             setTotalCartValue={setTotalCartValue}
             item={item}
+            cartState={cartState}
+            setCartState={setCartState}
+            orderedQuantity={item.orderedQuantity ?? 1}
           />
         ))}
       </Box>
