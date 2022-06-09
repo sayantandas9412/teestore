@@ -20,6 +20,7 @@ import CheckBoxGenderContainer from "../components/GenderCheckBox/CheckBoxGender
 import ChakraModal from "../components/Modal";
 import CheckBoxPriceContainer from "../components/PriceCheckBox/CheckBoxPriceContainer";
 import CheckBoxTypeContainer from "../components/TypeCheckBox/CheckBoxTypeContainer";
+import { GET_API } from "../constants";
 
 interface ProductPageProps {
   data: Data[];
@@ -42,6 +43,7 @@ export interface Data {
   gender: string;
   quantity: number;
   disabled: boolean;
+  orderedQuantity: number;
 }
 
 interface Filters {
@@ -98,6 +100,9 @@ const Home: FC<ProductPageProps> = ({
 
     let resultantArr = isSearched ? searchedItems : data;
     let categories = [];
+
+    // filter by multiple categories and setState
+
     const findState = (filters: Filters) => {
       resultantArr.forEach((value) => {
         const keys = Object.keys(value);
@@ -152,7 +157,7 @@ const Home: FC<ProductPageProps> = ({
     data,
   ]);
 
-  const handleCheckBoxClick = (e: any) => {
+  const handleCheckBoxClick = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Colour changes -
 
     if (uniqueColouredItems.includes(e.target.value)) {
@@ -188,13 +193,12 @@ const Home: FC<ProductPageProps> = ({
 
         if (selectedColoursData.selectedColours.length === 0) {
           setSelectedColours({ selectedColours: [] });
-          // setState(data);
         }
         setColour({ color: selectedColoursData.selectedColours });
       }
     }
 
-    // gender Changes --
+    // Gender Changes --
 
     if (uniqueGenderItems.includes(e.target.value)) {
       if (e.target.checked === true) {
@@ -227,7 +231,7 @@ const Home: FC<ProductPageProps> = ({
       }
     }
 
-    // PRICE CHANGES  -
+    // Price Changes  -
 
     if (uniquePriceItems.includes(Number(e.target.value))) {
       if (e.target.checked === true) {
@@ -266,7 +270,7 @@ const Home: FC<ProductPageProps> = ({
       }
     }
 
-    // TYPE CHANGES -
+    // Type Changes -
 
     if (uniqueTypeItems.includes(e.target.value)) {
       if (e.target.checked === true) {
@@ -484,16 +488,19 @@ const Home: FC<ProductPageProps> = ({
   );
 };
 
+// fetch data from API
+
 export const getStaticProps = async () => {
   const fetchData = async (api: string) => {
-    console.log("fetch data is called");
-    const data = await fetch(api);
-    return await data.json();
+    try {
+      const data = await fetch(api);
+      return await data.json();
+    } catch (error) {
+      throw new Error("cannot fetch data, please retry");
+    }
   };
 
-  const fetchedData = await fetchData(
-    "https://geektrust.s3.ap-southeast-1.amazonaws.com/coding-problems/shopping-cart/catalogue.json"
-  );
+  const fetchedData = await fetchData(GET_API);
   return {
     props: { data: fetchedData },
   };

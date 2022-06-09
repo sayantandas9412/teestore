@@ -4,17 +4,16 @@ import { Data } from ".";
 import CartItem from "../components/CartItem";
 
 export interface CartPageProps {
-  cartItems: Data[];
-  cartState: any;
+  cartState: Data[];
   setCartState: any;
 }
 
-const Cart: FC<CartPageProps> = ({ cartItems, cartState, setCartState }) => {
+const Cart: FC<CartPageProps> = ({ cartState, setCartState }) => {
   const [totalCartValue, setTotalCartValue] = useState(0);
 
   useEffect(() => {
     const cartValue = cartState.reduce(
-      (previousValue: any, currentValue: any) =>
+      (previousValue: number, currentValue: Data) =>
         previousValue + currentValue.price,
       totalCartValue
     );
@@ -39,7 +38,7 @@ const Cart: FC<CartPageProps> = ({ cartItems, cartState, setCartState }) => {
         alignItems="center"
         my="2rem"
       >
-        {cartState.map((item: any, index: number) => (
+        {cartState.map((item: Data, index: number) => (
           <CartItem
             key={index}
             totalCartValue={totalCartValue}

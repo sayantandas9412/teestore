@@ -1,5 +1,5 @@
 import { Checkbox } from "@chakra-ui/react";
-import React, { ChangeEvent, Dispatch, FC, SetStateAction } from "react";
+import React, { ChangeEvent, FC } from "react";
 
 interface ChakraGenderCheckBox {
   item: string;

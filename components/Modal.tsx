@@ -8,7 +8,6 @@ import {
   ModalFooter,
   ModalOverlay,
 } from "@chakra-ui/react";
-import Link from "next/link";
 
 interface ModalProps {
   isOpen: boolean;

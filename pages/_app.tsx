@@ -34,24 +34,24 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [showModal, setShowModal] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   let itemPresentInCart;
-  const handleAddCartClick = (id: number, state: any, setState: any) => {
+  const handleAddCartClick = (id: number, state: Data[], setState: any) => {
     onOpen();
     setDisableAddCartButton(true);
     const cartItem = state
-      .filter((item: any) => item.id === id)
-      .map((item: any) => {
+      .filter((item: Data) => item.id === id)
+      .map((item: Data) => {
         return { ...item, disabled: true };
       });
 
     itemPresentInCart = cartState.data.filter(
-      (child: any) => child.id === cartItem[0].id
+      (child: Data) => child.id === cartItem[0].id
     );
-    setCartState((prevState): any => {
+    setCartState((prevState: any) => {
       if (itemPresentInCart.length === 0) {
         return { data: [...prevState.data, cartItem[0]] };
       } else return { data: prevState.data };
     });
-    const result = state.map((data: any) => {
+    const result = state.map((data: Data) => {
       if (data.id === id) {
         return { ...data, disabled: true };
       } else return data;
@@ -69,7 +69,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     );
 
     itemPresentInCart = cartState.data.filter(
-      (child: any) => child.id === cartItem[0].id
+      (child: Data) => child.id === cartItem[0].id
     );
   };
   useEffect(() => {

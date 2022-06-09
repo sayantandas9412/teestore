@@ -39,7 +39,7 @@ const CartItem: FC<CartItemProps> = ({
 
     setCartState({ data: filteredCartItems });
     setQuantity(orderedQuantity);
-    setTotalCartValue((prevState: any) => prevState - price);
+    setTotalCartValue((prevState: number) => prevState - price);
   };
   return (
     <HStack

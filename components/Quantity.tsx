@@ -1,5 +1,6 @@
 import { Box, Button } from "@chakra-ui/react";
 import { FC, useEffect } from "react";
+import { Data } from "../pages";
 
 interface QuantityProps {
   quantity: number;
@@ -12,7 +13,7 @@ interface QuantityProps {
   totalCartValue: number;
   setTotalCartValue: any;
   price: number;
-  cartState: any;
+  cartState: Data[];
   id: number;
   setCartState: any;
   orderedQuantity: number;
@@ -52,14 +53,14 @@ const Quantity: FC<QuantityProps> = ({
 
   const handleAddClick = () => {
     setSubtractButtonDisabled(false);
-    setQuantity((prevState: any) => prevState + 1);
-    setTotalCartValue((prevState: any) => prevState + price);
+    setQuantity((prevState: number) => prevState + 1);
+    setTotalCartValue((prevState: number) => prevState + price);
     if (quantity >= maxQuantity - 1) {
       setAddButtonDisabled(true);
       setSubtractButtonDisabled(false);
     }
 
-    const result = cartState.map((data: any) => {
+    const result = cartState.map((data: Data) => {
       if (data.id === id) {
         return { ...data, orderedQuantity: quantity + 1 };
       } else return data;
@@ -69,12 +70,12 @@ const Quantity: FC<QuantityProps> = ({
 
   const handleSubtractClick = () => {
     setAddButtonDisabled(false);
-    setTotalCartValue((prevState: any) => prevState - price);
+    setTotalCartValue((prevState: number) => prevState - price);
     if (quantity <= 1) {
       setQuantity(1);
       setSubtractButtonDisabled(true);
-    } else setQuantity((prevState: any) => prevState - 1);
-    const result = cartState.map((data: any) => {
+    } else setQuantity((prevState: number) => prevState - 1);
+    const result = cartState.map((data: Data) => {
       if (data.id === id) {
         return { ...data, orderedQuantity: orderedQuantity - 1 };
       } else return data;
