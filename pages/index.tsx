@@ -438,13 +438,15 @@ const Home: FC<ProductPageProps> = ({
           )}
 
           {state.length === 0 && showFilterMenu === false ? (
-            <Heading
-              alignContent="center"
-              size="md"
-              data-test-id="action-no-match"
-            >
-              Oops ! No Item matches <br /> the selected filter
-            </Heading>
+            <Box px={["3rem", "1rem"]} w={["100%", "60%", "95%", "100%"]}>
+              <Heading
+                alignContent="center"
+                size="md"
+                data-test-id="action-no-match"
+              >
+                Oops ! No Item matches the selected filter
+              </Heading>
+            </Box>
           ) : null}
         </Stack>
       </VStack>

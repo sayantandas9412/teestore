@@ -27,7 +27,7 @@ const BaseComponent: FC<BaseComponentProps> = ({ children, quantity }) => {
   return (
     <Layout>
       <Header {...headerData} quantity={quantity} />
-      <Box minH="110vh">{children}</Box>
+      <Box minH="174vh">{children}</Box>
       <Footer />
     </Layout>
   );
