@@ -38,7 +38,7 @@ const CartItem: FC<CartItemProps> = ({
     }
 
     setCartState({ data: filteredCartItems });
-    setQuantity(orderedQuantity);
+    setQuantity(orderedQuantity - 1);
     setTotalCartValue((prevState: number) => prevState - price);
   };
   return (

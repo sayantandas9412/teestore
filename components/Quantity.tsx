@@ -48,8 +48,9 @@ const Quantity: FC<QuantityProps> = ({
     }
     if (maxQuantity === 1) {
       setSubtractButtonDisabled(true);
+      setAddButtonDisabled(true);
     }
-  }, [orderedQuantity]);
+  }, [orderedQuantity, quantity]);
 
   const handleAddClick = () => {
     setSubtractButtonDisabled(false);
@@ -62,7 +63,7 @@ const Quantity: FC<QuantityProps> = ({
 
     const result = cartState.map((data: Data) => {
       if (data.id === id) {
-        return { ...data, orderedQuantity: quantity + 1 };
+        return { ...data, orderedQuantity: orderedQuantity + 1 };
       } else return data;
     });
     setCartState({ data: result });
