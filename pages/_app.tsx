@@ -39,7 +39,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     const cartItem = state
       .filter((item: Data) => item.id === id)
       .map((item: Data) => {
-        return { ...item, disabled: true };
+        return { ...item, disabled: true, orderedQuantity: 1 };
       });
 
     itemPresentInCart = cartState.data.filter(

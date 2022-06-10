@@ -15,8 +15,11 @@ const Cart: FC<CartPageProps> = ({ cartState, setCartState }) => {
 
   useEffect(() => {
     const cartValue = cartState.reduce(
-      (previousValue: number, currentValue: Data) =>
-        previousValue + currentValue.price,
+      (previousValue: number, currentValue: Data) => {
+        return (
+          previousValue + currentValue.price * currentValue.orderedQuantity
+        );
+      },
       totalCartValue
     );
     setTotalCartValue(cartValue);
