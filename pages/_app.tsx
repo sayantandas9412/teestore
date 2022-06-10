@@ -25,7 +25,6 @@ const fonts = {
   },
 };
 const theme = extendTheme({ colors, fonts });
-let cartItems: Data[] = [];
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [quantity, setQuantity] = useState(0);
@@ -61,12 +60,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       setShowModal(true);
       itemPresentInCart = [];
     } else setShowModal(false);
-    cartItems.push(...cartItem);
     setState(result);
-    cartItems = cartItems.filter(
-      (value, index, array) =>
-        index === array.findIndex((child) => child.id === value.id)
-    );
 
     itemPresentInCart = cartState.data.filter(
       (child: Data) => child.id === cartItem[0].id
@@ -87,7 +81,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           showModal={showModal}
           modalIsOpen={isOpen}
           modalOnClose={onClose}
-          cartItems={cartItems}
           setCartState={setCartState}
           cartState={cartState.data}
         />
