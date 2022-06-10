@@ -1,6 +1,6 @@
 **Get Started**
 
-In your terminal run **npm run install** to install all the required dependencies
+In your terminal run **npm install** to install all the required dependencies
 After that run **npm run dev** to start the development server
 
 **Run End to End Cypress tests locally**
