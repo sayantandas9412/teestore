@@ -75,6 +75,7 @@ const Home: FC<ProductPageProps> = ({
   const [typeData, setType] = useState({ type: [] });
   const [isSearched, setIsSearched] = useState(false);
   const [searchedItems, setSearchedItems] = useState(data);
+  const [inputSearchText, setInputSearchText] = useState("");
   const [selectedColoursData, setSelectedColours] = useState<any>({
     selectedColours: [],
   });
@@ -156,6 +157,17 @@ const Home: FC<ProductPageProps> = ({
     searchedItems,
     data,
   ]);
+
+  useEffect(() => {
+    const tempState = [...data];
+    const filteredData = tempState.filter(
+      (child) =>
+        child.name.toLowerCase().includes(inputSearchText) ||
+        child.type.toLowerCase().includes(inputSearchText)
+    );
+    setState(filteredData);
+    setSearchedItems(filteredData);
+  }, [inputSearchText]);
 
   const handleCheckBoxClick = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Colour changes -
@@ -312,17 +324,14 @@ const Home: FC<ProductPageProps> = ({
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setIsSearched(true);
-    const filteredData = state.filter(
-      (child) =>
-        child.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
-        child.type.toLowerCase().includes(e.target.value.toLowerCase())
-    );
-    setState(filteredData);
+
+    setInputSearchText(e.target.value.toLowerCase());
+
     if (e.target.value === "") {
       setIsSearched(false);
       setState(data);
+      setInputSearchText("");
     }
-    setSearchedItems(filteredData);
   };
 
   const handleAddCartButtonClick = (id: number) => {
